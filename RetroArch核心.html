@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>RetroArch完整核心列表</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+        font-size: 14px;
+    }
+    th, td {
+        border: 1px solid #555;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #333;
+        position: sticky;
+        top: 0;
+        color: #fff;
+    }
+    .highlight {
+    background-color: rgba(128, 0, 128, 0.4); /* 紫色，40%不透明度 */
+    font-weight: bold;
+    color: #ffcc80;
+   }
+    .section-header {
+        background-color: #2e7d32;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        color: #fff;
+    }
+    .note {
+        background-color: #1e1e1e;
+        padding: 10px;
+        margin: 10px 0;
+        border-left: 4px solid #ff9800;
+        color: #e0e0e0;
+    }
+   </style>
+</head>
+<body>
+    <h1>RetroArch完整核心列表</h1>    
+    <div class="note">
+        <strong>说明：</strong>黄色高亮显示的是您需要的核心（NES、PSP、PS1、PS2、街机、DOS、任天堂游戏）
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th width="50%">核心名称</th>
+                <th width="50%">说明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2048</td><td>数字益智游戏《2048》的独立引擎</td></tr>
+            <tr><td>Amstrad - CPC (CrocoDS)</td><td>用于模拟 Amstrad CPC 电脑</td></tr>
+            <tr><td>Amstrad - CPC/GX4000 (Caprice32)</td><td>用于模拟 Amstrad CPC 电脑及 GX4000 游戏机</td></tr>
+            <tr><td>Anarch</td><td>一个实验性的核心</td></tr>
+            <tr><td>Arcade (DICE)</td><td>用于模拟基于 DICE 系统的街机游戏</td></tr>
+            <tr class="highlight"><td>Arcade (FB Alpha 2012 CPS-1)</td><td>用于模拟 Capcom CPS-1 基板的街机游戏</td></tr>
+            <tr class="highlight"><td>Arcade (FB Alpha 2012 CPS-2)</td><td>用于模拟 Capcom CPS-2 基板的街机游戏 (许可证：Noncommercial)</td></tr>
+            <tr class="highlight"><td>Arcade (FB Alpha 2012 CPS-3)</td><td>用于模拟 Capcom CPS-3 基板的街机游戏</td></tr>
+            <tr class="highlight"><td>Arcade (FB Alpha 2012 Neo Geo)</td><td>用于模拟 SNK Neo Geo (AES/MVS) 的街机游戏</td></tr>
+            <tr class="highlight"><td>Arcade (FB Alpha 2012)</td><td>用于模拟多种街机游戏的旧版 FBA 核心</td></tr>
+            <tr class="highlight"><td>Arcade (FinalBurn Neo)</td><td>用于模拟多种街机游戏的现代、活跃维护的核心，推荐使用</td></tr>
+            <tr class="highlight"><td>Arcade (MAME 2000)</td><td>基于 MAME 0.37b5 版本的街机模拟核心，非常古老</td></tr>
+            <tr class="highlight"><td>Arcade (MAME 2003 Midway)</td><td>基于 MAME 2003，专注于 Midway 游戏的变体</td></tr>
+            <tr class="highlight"><td>Arcade (MAME 2003)</td><td>基于 MAME 0.78 版本的街机模拟核心，经典且兼容性好</td></tr>
+            <tr class="highlight"><td>Arcade (MAME 2003-Plus)</td><td>MAME 2003 的增强版，修复和改进了部分游戏</td></tr>
+            <tr class="highlight"><td>Arcade (MAME 2010)</td><td>基于 MAME 0.139 版本的街机模拟核心</td></tr>
+            <tr class="highlight"><td>Arcade (MAME)</td><td>基于最新 MAME 的街机模拟核心，追求精确性</td></tr>
+            <tr><td>Arduboy (Ardens)</td><td>用于模拟 Arduboy 掌上游戏机</td></tr>
+            <tr><td>Arduboy (Arduous)</td><td>另一个用于模拟 Arduboy 的核心</td></tr>
+            <tr><td>Atari - 2600 (Stella 2014)</td><td>用于模拟雅达利 2600 游戏机的旧版核心</td></tr>
+            <tr><td>Atari - 2600 (Stella 2023)</td><td>Stella 核心的 2023 年版本</td></tr>
+            <tr><td>Atari - 2600 (Stella)</td><td>用于模拟雅达利 2600 游戏机的现代、高精度核心</td></tr>
+            <tr><td>Atari - 400/800/600XL/800XL/130XE/5200 (Atari800)</td><td>用于模拟雅达利 8-bit 电脑系列和 5200 游戏机</td></tr>
+            <tr><td>Atari - 5200 (a5200)</td><td>专门用于模拟雅达利 5200 游戏机</td></tr>
+            <tr><td>Atari - 7800 (ProSystem)</td><td>用于模拟雅达利 7800 游戏机</td></tr>
+            <tr><td>Atari - Jaguar (Virtual Jaguar)</td><td>用于模拟雅达利 Jaguar 游戏机</td></tr>
+            <tr><td>Atari - Lynx (Beetle Lynx)</td><td>用于模拟雅达利 Lynx 掌机 (高精度)</td></tr>
+            <tr><td>Atari - Lynx (Handy)</td><td>用于模拟雅达利 Lynx 掌机的经典核心</td></tr>
+            <tr><td>Atari - Lynx (Holani)</td><td>另一个用于模拟雅达利 Lynx 掌机的核心</td></tr>
+            <tr><td>Atari - ST/STE/TT/Falcon (Hatari)</td><td>用于模拟雅达利 ST 系列电脑</td></tr>
+            <tr><td>Bandai - Tamagotchi P1 (TamaLIBretro)</td><td>用于模拟拓麻歌子 P1 电子宠物</td></tr>
+            <tr><td>Bandai - WonderSwan/Color (Beetle Wonderswan)</td><td>用于模拟万代 WonderSwan/Color 掌机</td></tr>
+            <tr><td>Cannonball</td><td>街机游戏《Out Run》的增强版引擎</td></tr>
+            <tr><td>Cave Story (drs)</td><td>游戏《洞窟物语》(Cave Story) 的独立引擎</td></tr>
+            <tr><td>Cave Story (NXEngine)</td><td>游戏《洞窟物语》(Cave Story) 的另一个独立引擎</td></tr>
+            <tr><td>ChaiLove</td><td>用于运行基于 ChaiLove 框架制作的 2D 游戏</td></tr>
+            <tr><td>CHIP-8/S-CHIP/XO-CHIP (JAXE)</td><td>用于模拟 CHIP-8 及其变体编程语言虚拟机</td></tr>
+            <tr><td>Coleco - ColecoVision (Gearcoleco)</td><td>用于模拟 ColecoVision 游戏机</td></tr>
+            <tr><td>Commodore - Amiga (PUAE 2021)</td><td>PUAE 核心的 2021 年版本</td></tr>
+            <tr><td>Commodore - Amiga (PUAE)</td><td>用于模拟 Commodore Amiga 电脑</td></tr>
+            <tr><td>Commodore - C128 (VICE x128)</td><td>用于模拟 Commodore 128 电脑</td></tr>
+            <tr><td>Commodore - C64 (VICE x64, fast)</td><td>用于快速模拟 Commodore 64 电脑</td></tr>
+            <tr><td>Commodore - C64 (VICE x64sc, accurate)</td><td>用于高精度模拟 Commodore 64 电脑</td></tr>
+            <tr><td>Commodore - C64 SuperCPU (VICE xscpu64)</td><td>用于模拟带 SuperCPU 的 Commodore 64</td></tr>
+            <tr><td>Commodore - CBM-II 5x0 (VICE xcbm5x0)</td><td>用于模拟 Commodore CBM-II 5x0 系列电脑</td></tr>
+            <tr><td>Commodore - CBM-II 6x0/7x0 (VICE xcbm2)</td><td>用于模拟 Commodore CBM-II 6x0/7x0 系列电脑</td></tr>
+            <tr><td>Commodore - PET (VICE xpet)</td><td>用于模拟 Commodore PET 电脑</td></tr>
+            <tr><td>Commodore - PLUS/4 (VICE xplus4)</td><td>用于模拟 Commodore PLUS/4 电脑</td></tr>
+            <tr><td>Commodore - VIC-20 (VICE xvic)</td><td>用于模拟 Commodore VIC-20 电脑</td></tr>
+            <tr><td>Dinothawr</td><td>一个独立的 2D 平台解谜游戏</td></tr>
+            <tr><td>Doom (PrBoom)</td><td>用于运行《DOOM》及其模组 (.wad 文件)</td></tr>
+            <tr><td>Doom 3 (bo0om3)</td><td>用于运行游戏《DOOM 3》</td></tr>
+            <tr><td>Doom 3: Resurrection of Evil (boom 3 xp)</td><td>用于运行《DOOM 3：邪恶复苏》资料片</td></tr>
+            <tr class="highlight"><td>DOS (DOSBox-core)</td><td>用于模拟 DOS 环境的经典核心</td></tr>
+            <tr class="highlight"><td>DOS (DOSBox-Pure)</td><td>DOSBox 的变体，更注重易用性和游戏兼容性</td></tr>
+            <tr><td>DOS (DOSBOx-SVN)</td><td>基于 DOSBox SVN 版本的开发中核心</td></tr>
+            <tr><td>Elektronika - BK-0010/BK-0011(M)</td><td>用于模拟苏联 Elektronika BK 系列电脑</td></tr>
+            <tr><td>Enterprise - 64/128 (ep128emu)</td><td>用于模拟 Enterprise 64/128 电脑</td></tr>
+            <tr><td>Fairchild ChannelF (FreeChaF)</td><td>用于模拟 Fairchild Channel F 游戏机</td></tr>
+            <tr><td>Flashback (REminiscence)</td><td>游戏《Flashback》的独立引擎</td></tr>
+            <tr><td>Game Music Emu</td><td>专门用于播放视频游戏音乐文件 (如 .vgm, .nsf)</td></tr>
+            <tr><td>GCE - Vectrex (vecx)</td><td>用于模拟 GCE Vectrex 矢量图形游戏机</td></tr>
+            <tr><td>Gong</td><td>一个独立的游戏/演示核心</td></tr>
+            <tr><td>Handheld Electronic (GW)</td><td>用于模拟各种手持电子游戏机</td></tr>
+            <tr><td>Infocom Z-Machine (MojoZork)</td><td>用于运行 Infocom 公司的 Z-Machine 文字冒险游戏</td></tr>
+            <tr><td>Java ME (SquirreJME)</td><td>用于运行 Java ME (J2ME) 应用程序和游戏</td></tr>
+            <tr><td>Jump 'n Bump</td><td>一个独立的多人平台跳跃游戏</td></tr>
+            <tr><td>Laserdisc arcade game (DirkSimple)</td><td>用于模拟激光视盘街机游戏 (如 Dragon's Lair)</td></tr>
+            <tr><td>LowRes NX</td><td>一个虚构的低分辨率游戏主机的模拟器/开发平台</td></tr>
+            <tr><td>Lua Engine (Lutro)</td><td>用于运行使用 Lua 语言编写的游戏 (遵循 LÖVE API)</td></tr>
+            <tr><td>Mac II (minivmac)</td><td>用于模拟早期 Macintosh 电脑</td></tr>
+            <tr><td>Magnavox - Odyssey2 / Philips Videopac+ (O2EM)</td><td>用于模拟 Magnavox Odyssey2 / Philips Videopac+ 游戏机</td></tr>
+            <tr><td>Mattel - Intellivision (FreeIntv)</td><td>用于模拟 Mattel Intellivision 游戏机</td></tr>
+            <tr><td>McSoftServe</td><td>一个独立的游戏核心</td></tr>
+            <tr><td>Mega Duck / Cougar Boy (SameDuck)</td><td>用于模拟 Mega Duck / Cougar Boy 掌机</td></tr>
+            <tr><td>Microsoft - MSX (fMSX)</td><td>用于模拟 MSX/MSX2/MSX2+ 电脑</td></tr>
+            <tr><td>MicroW8</td><td>一个独立的游戏核心</td></tr>
+            <tr><td>Minecraft (Craft)</td><td>《Minecraft》的克隆版/独立实现</td></tr>
+            <tr><td>Mr.Boom (Bomberman)</td><td>一个 8 人版的《炸弹人》克隆游戏</td></tr>
+            <tr><td>MSX/SVI/ColecoVision/SG-1000 (blueMSX)</td><td>用于模拟 MSX、ColecoVision、SG-1000 等多种电脑和游戏机</td></tr>
+            <tr><td>NEC - PC Engine / CD (Beetle PCE FAST)</td><td>用于模拟 PC Engine (TurboGrafx-16) 及 CD，侧重速度</td></tr>
+            <tr><td>NEC - PC Engine / SuperGrafx / CD (Beetle PCE)</td><td>用于模拟 PC Engine、SuperGrafx 及 CD，侧重精度</td></tr>
+            <tr><td>NEC - PC Engine SuperGrafx (Beetle SuperGrafx)</td><td>专门用于模拟 PC Engine SuperGrafx</td></tr>
+            <tr><td>NEC - PC-8000 / PC-8800 series (QUASI88)</td><td>用于模拟 NEC PC-88 系列电脑</td></tr>
+            <tr><td>NEC - PC-98 (Neko Project II Kai)</td><td>Neko Project II 的改进版</td></tr>
+            <tr><td>NEC - PC-98 (Neko Project II)</td><td>用于模拟 NEC PC-98 电脑</td></tr>
+            <tr><td>NEC - PC-FX (Beetle PC-FX)</td><td>用于模拟 NEC PC-FX 游戏机</td></tr>
+            <tr><td>Nintendo - 3DS (Citra 2018)</td><td>Citra 核心的 2018 年版本</td></tr>
+            <tr><td>Nintendo - 3DS (Citra)</td><td>用于模拟任天堂 3DS 掌机</td></tr>
+            <tr class="highlight"><td>Nintendo - DS (DeSmuME 2015)</td><td>DeSmuME 核心的 2015 年版本</td></tr>
+            <tr class="highlight"><td>Nintendo - DS (DeSmuME)</td><td>用于模拟任天堂 DS 掌机</td></tr>
+            <tr class="highlight"><td>Nintendo - DS (melonDS DS)</td><td>melonDS 核心的另一种表述</td></tr>
+            <tr class="highlight"><td>Nintendo - DS (melonDS)</td><td>用于模拟任天堂 DS 掌机，注重精度和网络功能</td></tr>
+            <tr><td>Nintendo - DS (NooDS)</td><td>一个相对较新的任天堂 DS 模拟器核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy / Color (DoubleCherryGB)</td><td>用于模拟 Game Boy/Color 的实验性核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy / Color (Gambatte)</td><td>用于高精度模拟 Game Boy/Color 的经典核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy / Color (Gearboy)</td><td>另一个用于模拟 Game Boy/Color 的核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy / Color (SameBoy)</td><td>一个高精度、高兼容性的 Game Boy/Color 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy / Color (TGB Dual)</td><td>支持双人联机的 Game Boy 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy Advance (gpSP)</td><td>一个轻量级、快速的 GBA 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy Advance (mGBA)</td><td>功能丰富、高兼容性的 GBA 模拟核心，推荐使用</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy Advance (VBA Next)</td><td>VBA-M 的一个分支版本</td></tr>
+            <tr class="highlight"><td>Nintendo - Game Boy Advance (VBA-M)</td><td>VisualBoyAdvance-M 的 RetroArch 核心版</td></tr>
+            <tr class="highlight"><td>Nintendo - GameCube / Wi (Dolphin)</td><td>用于模拟任天堂 GameCube 和 Wii 游戏机 (要求高)</td></tr>
+            <tr class="highlight"><td>Nintendo - NES / Famicom (FCEUmm)</td><td>一个兼容性良好的 NES 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - NES / Famicom (Mesen)</td><td>一个周期精确的高精度 NES 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - NES / Famicom (Nestopia)</td><td>一个经典且高兼容性的 NES 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - NES / Famicom (QuickNES)</td><td>一个快速、轻量级的 NES 模拟核心</td></tr>
+            <tr class="highlight"><td>Nintendo - Nintendo 64 (Mupen64Plus-Next)</td><td>功能丰富的 N64 模拟核心，兼容性好，推荐使用</td></tr>
+            <tr class="highlight"><td>Nintendo - Nintendo 64 (ParaLLEl N64)</td><td>使用 ParaLLEl-RDP 进行低级别、高精度图形模拟的 N64 核心</td></tr>
+            <tr><td>Nintendo - Pokemon Mini (PokeMini)</td><td>用于模拟任天堂 Pokemon Mini 掌机</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Beetle Supafaust)</td><td>一个注重性能和兼容性的 SNES 核心</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes 2014 Accuracy)</td><td>bsnes 的 2014 精度版 (要求高，最精确)</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes 2014 Balanced)</td><td>bsnes 的 2014 平衡版 (推荐)</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes 2014 Performance)</td><td>bsnes 的 2014 性能版 (要求低)</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes)</td><td>高精度 SNES 模拟核心的最新版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes-hd beta)</td><td>支持高分辨率模式的 bsnes 测试版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes-jg)</td><td>bsnes 的一个衍生版本</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes-mercury Accuracy)</td><td>bsnes-mercury 的精度版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes-mercury Balanced)</td><td>bsnes-mercury 的平衡版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (bsnes-mercury Performance)</td><td>bsnes-mercury 的性能版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Snes9x 2002)</td><td>非常古老但快速的 Snes9x 版本</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Snes9x 2005 Plus)</td><td>Snes9x 2005 的增强版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Snes9x 2005)</td><td>较老的 Snes9x 版本，适合低性能设备</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Snes9x 2010)</td><td>介于新旧版本之间的 Snes9x 版本</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC (Snes9x)</td><td>快速、兼容性好的 SNES 模拟核心的最新版</td></tr>
+            <tr class="highlight"><td>Nintendo - SNES / SFC / Game Boy / Color (Mesen-S)</td><td>高精度的 SNES 和 Game Boy/Color 模拟核心</td></tr>
+            <tr><td>Nintendo - Virtual Boy (Beetle VB)</td><td>用于模拟任天堂 Virtual Boy 游戏机</td></tr>
+            <tr><td>Oberon RISC Emulator</td><td>用于模拟 Oberon RISC 架构的电脑系统</td></tr>
+            <tr><td>Palm OS (Mu)</td><td>用于模拟 Palm OS 掌上电脑</td></tr>
+            <tr><td>Philips - CDi (SAME CDi)</td><td>用于模拟 Philips CD-i 交互式光盘系统</td></tr>
+            <tr><td>Philips - P2000T (M2000)</td><td>用于模拟 Philips P2000T 家用电脑</td></tr>
+            <tr><td>Philips CDi (CDi 2015)</td><td>用于模拟 Philips CD-i 的旧版核心</td></tr>
+            <tr><td>PICO-8 (Retr08)</td><td>用于运行 PICO-8 幻想游戏机的卡带文件</td></tr>
+            <tr><td>PocketCDG</td><td>用于播放 CD+G (CD+Graphics) 格式的卡拉OK光盘</td></tr>
+            <tr><td>Quake (TyrQuake)</td><td>用于运行游戏《雷神之锤》(Quake)</td></tr>
+            <tr><td>Quake II (vitaQuake 2)</td><td>用于运行游戏《雷神之锤 II》(Quake II) 基础版</td></tr>
+            <tr><td>Quake II - Ground Zero (vitaQuake 2 [Roguel)</td><td>用于运行《雷神之锤 II：地面零点》资料片</td></tr>
+            <tr><td>Quake II - The Reckoning (vitaQuake 2 [Xatrixl)</td><td>用于运行《雷神之锤 II：审判》资料片</td></tr>
+            <tr><td>Quake II - Zaero (vitaQuake 2 [Zaero])</td><td>用于运行《雷神之锤 II：Zaero》资料片</td></tr>
+            <tr><td>Quake II: Arena (vitaQuake 3)</td><td>用于运行游戏《雷神之锤 III：竞技场》</td></tr>
+            <tr><td>Rick Dangerous (XRick)</td><td>游戏《Rick Dangerous》的独立引擎</td></tr>
+            <tr><td>ROM Cleaner</td><td>用于清理和优化 ROM 文件的工具核心</td></tr>
+            <tr><td>RPG Maker 2000/2003 (EasyRPG)</td><td>用于运行 RPG Maker 2000/2003 制作的游戏</td></tr>
+            <tr><td>ScummVM</td><td>用于运行许多经典的点击式图形冒险游戏</td></tr>
+            <tr><td>Sega - Dreamcast/Naomi (Flycast)</td><td>用于模拟世嘉 Dreamcast 和 Naomi 街机系统，推荐使用</td></tr>
+            <tr><td>Sega - Mega Drive - Genesis (BlastEm)</td><td>一个高精度的世嘉 Genesis/Mega Drive 模拟核心</td></tr>
+            <tr><td>Sega - MS/GG (SMS Plus GX)</td><td>用于模拟世嘉 Master System 和 Game Gear</td></tr>
+            <tr><td>Sega - MS/GG/MD/CD (Genesis Plus GX Wide)</td><td>支持宽屏模式的 Genesis Plus GX 变体</td></tr>
+            <tr><td>Sega - MS/GG/MD/CD (Genesis Plus GX)</td><td>用于模拟世嘉 8/16 位主机 (MS, GG, MD, CD) 的全能核心，推荐使用</td></tr>
+            <tr><td>Sega - MS/GG/MD/CD/32X (PicoDrive)</td><td>支持 32X 的世嘉多平台模拟核心，性能较好</td></tr>
+            <tr><td>Sega - MS/GG/SG-1000 (Gearsystem)</td><td>用于模拟世嘉 Master System、Game Gear 和 SG-1000</td></tr>
+            <tr><td>Sega - Saturn (Beetle Saturn)</td><td>高精度的世嘉土星模拟核心 (要求高)</td></tr>
+            <tr><td>Sega - Saturn (YabaSanshiro)</td><td>Yabause 的衍生版本，通常性能和兼容性更好</td></tr>
+            <tr><td>Sega - Saturn (Yabause)</td><td>一个经典的世嘉土星模拟核心</td></tr>
+            <tr><td>Sega - Saturn/ST-V (Kronos)</td><td>用于模拟世嘉土星和 ST-V 街机基板</td></tr>
+            <tr><td>Sharp -X68000 (PX68k)</td><td>用于模拟 Sharp X68000 电脑</td></tr>
+            <tr><td>Sharp X1 (X Millennium)</td><td>用于模拟 Sharp X1 电脑</td></tr>
+            <tr><td>Sinclair - ZX 81 (EightyOne)</td><td>用于模拟 Sinclair ZX81 电脑</td></tr>
+            <tr><td>Sinclair - ZX Spectrum (Fuse)</td><td>用于模拟 Sinclair ZX Spectrum 电脑</td></tr>
+            <tr><td>SNK - Neo Geo AES/MVS (Geolith)</td><td>用于模拟 SNK Neo Geo (AES/MVS) 的另一个核心</td></tr>
+            <tr><td>SNK - Neo Geo CD (NeoCD)</td><td>用于模拟 SNK Neo Geo CD 游戏机</td></tr>
+            <tr><td>SNK - Neo Geo Pocket / Color (Beetle NeoPop)</td><td>用于模拟 SNK Neo Geo Pocket/Color 掌机</td></tr>
+            <tr><td>SNK - Neo Geo Pocket / Color (RACE)</td><td>另一个用于模拟 Neo Geo Pocket/Color 的核心</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation (Beetle PSX HW)</td><td>支持硬件加速渲染的 Beetle PSX 核心，推荐使用</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation (Beetle PSX)</td><td>高精度的索尼 PlayStation 模拟核心 (软件渲染)</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation (PCSX ReARMed)</td><td>一个快速、兼容性好的 PS1 核心，适合中低性能设备</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation (SwanStation)</td><td>一个较新的、快速且精确的 PS1 模拟核心</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation 2 (LRPS2)</td><td>用于模拟索尼 PlayStation 2 游戏机 (实验性，要求极高)</td></tr>
+            <tr class="highlight"><td>Sony - PlayStation Portable (PPSSPP)</td><td>用于模拟索尼 PSP 掌机，功能强大，推荐使用</td></tr>
+            <tr><td>Super Bros War</td><td>一个独立的《超级马里奥兄弟》风格多人对战游戏</td></tr>
+            <tr><td>Texas Instruments TI-83 (Numero)</td><td>用于模拟德州仪器 TI-83 图形计算器</td></tr>
+            <tr><td>The 3DO Company - 3DO (Opera)</td><td>用于模拟 3DO 游戏机</td></tr>
+            <tr><td>The Powder Toy</td><td>一个物理沙盒模拟游戏</td></tr>
+            <tr><td>Thomson - MO/TO (Theodore)</td><td>用于模拟 Thomson MO/TO 系列电脑</td></tr>
+            <tr><td>TIC-80</td><td>用于运行 TIC-80 幻想游戏机的卡带文件</td></tr>
+            <tr><td>Tomb Raider (OpenLara)</td><td>游戏《古墓丽影》的独立引擎</td></tr>
+            <tr><td>Uzebox (Uzem)</td><td>用于模拟 Uzebox 开源游戏机</td></tr>
+            <tr><td>VaporSpec</td><td>一个演示/独立核心</td></tr>
+            <tr><td>VeMUlator</td><td>用于模拟 Casio PV-1000 等系统</td></tr>
+            <tr><td>Vircon32</td><td>一个虚构的 32 位游戏主机的模拟器</td></tr>
+            <tr><td>VirtualXT</td><td>用于模拟 IBM PC/XT 兼容机</td></tr>
+            <tr><td>WASM-4</td><td>用于运行 WASM-4 幻想游戏机的卡带文件</td></tr>
+            <tr><td>Watara - Supervision (Potator)</td><td>用于模拟 Watara Supervision 掌机</td></tr>
+            <tr><td>Wolfenstein 3D (ECWolf)</td><td>用于运行《德军总部 3D》及其续作/模组</td></tr>
+        </tbody>
+    </table>
+    <div class="note">
+        <strong>高亮说明：</strong><br>
+        黄色高亮显示的是您需要的核心，包括：<br>
+        • NES游戏核心<br>
+        • PSP游戏核心<br>
+        • PS1游戏核心<br>
+        • PS2游戏核心<br>
+        • 所有街机游戏核心<br>
+        • DOS游戏核心<br>
+        • 任天堂其他平台核心 (SNES、N64、GBA、GB/C、DS、3DS、GameCube/Wii)
+    </div>
+<!-- 返回按钮 -->
+    <button class="return-button" onclick="window.location.href='index.html'">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+</button>
+</body>
+</html>

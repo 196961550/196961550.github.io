@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>EPUB/TXT 在线阅读器</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/reader.css">
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <script src="https://unpkg.com/epubjs/dist/epub.min.js"></script>
+</head>
+<body>
+    <!-- 文件选择界面 -->
+    <div id="selectionScreen">
+        <div class="dropzone" id="dropZone">点击或拖拽 EPUB/TXT 文件到这里</div>
+    </div>
+
+    <!-- 阅读器区域 -->
+    <div id="bookReader">
+        <div id="bookContent"></div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div id="controls">
+        <button id="prevPage">上一页</button>
+        <button id="nextPage">下一页</button>
+    </div>
+
+    <!-- 返回按钮 -->
+    <button class="return-button" onclick="window.location.href='index.html'">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </button>
+
+    <!-- 文件选择输入 -->
+    <input type="file" id="bookInput" style="display:none" accept=".epub,.txt">
+
+    <script src="js/reader.js"></script>
+</body>
+</html>
