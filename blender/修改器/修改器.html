@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blender 4.5所有自带修改器汇总</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D7FF9',
+                        secondary: '#4CAF50',
+                        accent: '#FF9800',
+                        dark: '#2C3E50',
+                        light: '#ECF0F1',
+                        deprecated: '#EF4444',
+                        legacy: '#F59E0B',
+                        current: '#10B981',
+                        darkMode: {
+                            bg: '#1A1A2E',
+                            card: '#16213E',
+                            text: '#E9ECEF',
+                            border: '#2A2A40'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .table-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .dark .table-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+            .theme-transition {
+                transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+            .modifier-english {
+                font-size: 0.85rem;
+                color: #6B7280;
+                font-style: italic;
+            }
+            .dark .modifier-english {
+                color: #9CA3AF;
+            }
+            .version-badge {
+                display: inline-block;
+                padding: 0.15rem 0.5rem;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            .version-current {
+                background-color: rgba(16, 185, 129, 0.1);
+                color: #10B981;
+            }
+            .version-legacy {
+                background-color: rgba(245, 158, 11, 0.1);
+                color: #F59E0B;
+            }
+            .version-deprecated {
+                background-color: rgba(239, 68, 68, 0.1);
+                color: #EF4444;
+            }
+            .tutorial-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
+                font-size: 0.9rem;
+                transition: all 0.2s ease;
+                text-decoration: none;
+            }
+            .foreign-tutorial {
+                color: #2D7FF9;
+            }
+            .china-tutorial {
+                color: #E63946;
+            }
+            .tutorial-link:hover {
+                text-decoration: underline;
+                transform: translateX(2px);
+            }
+            .dark .foreign-tutorial {
+                color: #60A5FA;
+            }
+            .dark .china-tutorial {
+                color: #F87171;
+            }
+            /* 新增样式 */
+            .category-badge {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100px;
+            }
+            .table-container {
+                min-width: 900px;
+            }
+            .filter-container {
+                flex-wrap: wrap;
+            }
+            .filter-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 theme-transition" id="app-body">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="mb-10 text-center">
+            <div class="flex justify-end mb-4">
+                <!-- 模式切换按钮 -->
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition theme-transition">
+                    <i class="fa fa-moon-o text-gray-700" id="theme-icon"></i>
+                </button>
+            </div>
+            <h1 class="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-dark mb-3 theme-transition">Blender 4.5所有自带修改器汇总</h1>
+            <p class="text-gray-600 max-w-3xl mx-auto theme-transition">
+                本表格完整汇总了Blender 4.5版本中所有自带修改器，包含分类、功能说明及国内外视频教程链接
+            </p>
+        </header>
+
+        <!-- 筛选控件 - 已修复布局 -->
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6 filter-container">
+            <div class="relative flex-1 max-w-[500px]">
+                <input type="text" id="search" placeholder="搜索修改器（中英文均可）..." 
+                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 w-full theme-transition">
+                <i class="fa fa-search absolute left-3 top-3 text-gray-400 theme-transition"></i>
+            </div>
+            
+            <div class="w-full md:w-auto">
+                <div class="filter-buttons">
+                    <button class="filter-btn active px-4 py-2 rounded-lg bg-primary text-white theme-transition" data-filter="all">全部</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="edit">编辑类</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="generate">生成类</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="deform">形变类</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="normal">法向</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="physics">物理类</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition theme-transition" data-filter="hair">毛发</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改器表格 - 已修复分类标签显示问题 -->
+        <div class="overflow-x-auto bg-white rounded-xl table-shadow theme-transition">
+            <table class="w-full border-collapse table-container">
+                <thead>
+                    <tr class="bg-gray-100 theme-transition">
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition" style="width: 50px;">序号</th>
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition" style="width: 100px;">分类</th>
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition" style="width: 180px;">修改器名称</th>
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition">使用说明</th>
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition" style="width: 200px;">国外视频教程</th>
+                        <th class="py-4 px-6 text-left text-gray-700 font-semibold border-b border-gray-200 theme-transition" style="width: 200px;">国内视频教程</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 编辑类修改器 -->
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">1</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition category-badge">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            数据传递修改器
+                            <div class="modifier-english">Data Transfer</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于在不同物体之间传递顶点数据，如顶点颜色、法向或UV坐标等属性。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Data Transfer" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+数据传递修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">2</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            网格缓存修改器
+                            <div class="modifier-english">Mesh Cache</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>允许导入和导出网格动画缓存数据，支持Alembic等格式。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Mesh+Cache" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+网格缓存修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">3</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            网格序列缓存修改器
+                            <div class="modifier-english">Mesh Sequence Cache</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于处理网格序列缓存，支持MDD和PC2格式。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Mesh+Sequence+Cache" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+网格序列缓存修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">4</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            UV投射修改器
+                            <div class="modifier-english">UV Project</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于将UV坐标以不同方式投射到模型表面。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+UV+Project" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+UV投射修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">5</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            UV偏移修改器
+                            <div class="modifier-english">UV Warp</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>通过物体或骨骼控制UV坐标的偏移和旋转。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+UV+Warp" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+UV偏移修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">6</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            顶点权重编辑修改器
+                            <div class="modifier-english">Vertex Weight Edit</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于编辑顶点组的权重值。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Vertex+Weight+Edit" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+顶点权重编辑修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">7</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            顶点权重混合修改器
+                            <div class="modifier-english">Vertex Weight Mix</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于混合多个顶点组的权重。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Vertex+Weight+Mix" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+顶点权重混合修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="edit">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">8</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">编辑类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            顶点权重邻近修改器
+                            <div class="modifier-english">Vertex Weight Proximity</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>基于与其他物体的距离生成顶点权重。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Vertex+Weight+Proximity" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+顶点权重邻近修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- 生成类修改器 -->
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">9</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition category-badge">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            阵列修改器
+                            <div class="modifier-english">Array</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>沿着指定轴复制物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Array" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+阵列修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">10</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            倒角修改器
+                            <div class="modifier-english">Bevel</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>为物体边缘添加倒角效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Bevel" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+倒角修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">11</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            布尔修改器
+                            <div class="modifier-english">Boolean</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>对两个物体执行布尔运算（并集、交集、差集）。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Boolean" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+布尔修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">12</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            建形修改器
+                            <div class="modifier-english">Build</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>随时间逐步显示或隐藏物体的面。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Build" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+建形修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">13</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            精简修改器
+                            <div class="modifier-english">Decimate</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>减少网格的多边形数量。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Decimate" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+精简修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">14</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            拆边修改器
+                            <div class="modifier-english">Edge Split</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>根据角度或标记拆分边，创建硬边效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Edge+Split" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+拆边修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">15</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            遮罩修改器
+                            <div class="modifier-english">Mask</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>基于顶点组隐藏或显示网格的特定部分。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Mask" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+遮罩修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">16</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            镜像修改器
+                            <div class="modifier-english">Mirror</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>沿一个或多个轴镜像物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Mirror" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+镜像修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">17</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            多级精度修改器
+                            <div class="modifier-english">Multiresolution</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>添加多分辨率细分级别，用于雕刻和细节添加。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Multiresolution" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+多级精度修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">18</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            重构网格修改器
+                            <div class="modifier-english">Remesh</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>重新生成网格拓扑结构，改善网格质量。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Remesh" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+重构网格修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">19</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            螺旋修改器
+                            <div class="modifier-english">Screw</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>将物体沿轴螺旋化。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Screw" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+螺旋修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">20</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            蒙皮修改器
+                            <div class="modifier-english">Skin</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>从顶点和边生成体积网格。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Skin" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+蒙皮修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">21</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            实体化修改器
+                            <div class="modifier-english">Solidify</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>为曲面添加厚度。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Solidify" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+实体化修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="generate">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">22</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition">生成类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            表面细分修改器
+                            <div class="modifier-english">Subdivision Surface</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>细分网格增加细节。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Subdivision+Surface" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+表面细分修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- 形变类修改器 -->
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">23</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition category-badge">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            骨架修改器
+                            <div class="modifier-english">Armature</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>将骨骼动画应用到网格物体上。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Armature" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+骨架修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">24</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            铸型修改器
+                            <div class="modifier-english">Cast</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>将物体变形为球体、圆柱体或立方体形状。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Cast" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+铸型修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">25</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            曲线修改器
+                            <div class="modifier-english">Curve</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>使网格沿曲线变形。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Curve" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+曲线修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">26</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            置换修改器
+                            <div class="modifier-english">Displace</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>通过纹理或顶点组使网格产生位移。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Displace" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+置换修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">27</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            钩挂修改器
+                            <div class="modifier-english">Hook</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>将网格顶点绑定到空物体或骨骼上。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Hook" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+钩挂修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">28</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            拉普拉斯形变修改器
+                            <div class="modifier-english">Laplacian Deform</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>基于拉普拉斯坐标保持细节的形变方式。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Laplacian+Deform" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+拉普拉斯形变修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">29</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            晶格修改器
+                            <div class="modifier-english">Lattice</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>通过晶格网格变形物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Lattice" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+晶格修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">30</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            网格形变修改器
+                            <div class="modifier-english">Mesh Deform</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>通过另一个网格的变形来驱动当前物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Mesh+Deform" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+网格形变修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">31</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            缩裹修改器
+                            <div class="modifier-english">Shrinkwrap</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>将一个物体缩裹到另一个物体表面。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Shrinkwrap" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+缩裹修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">32</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            简易形变修改器
+                            <div class="modifier-english">Simple Deform</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>提供多种简易形变效果（弯曲、扭曲、拉伸等）。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Simple+Deform" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+简易形变修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">33</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            平滑修改器
+                            <div class="modifier-english">Smooth</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>平滑网格表面。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Smooth" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+平滑修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">34</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            矫正平滑修改器
+                            <div class="modifier-english">Corrective Smooth</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>在保持形状的同时平滑网格。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Corrective+Smooth" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+矫正平滑修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">35</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            拉普拉斯平滑修改器
+                            <div class="modifier-english">Laplacian Smooth</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>使用拉普拉斯算法平滑网格。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Laplacian+Smooth" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+拉普拉斯平滑修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">36</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            表面形变修改器
+                            <div class="modifier-english">Surface Deform</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>使物体跟随另一个表面变形。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Surface+Deform" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+表面形变修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">37</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            弯绕修改器
+                            <div class="modifier-english">Warp</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>基于两个参考点弯曲物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Warp" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+弯绕修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="deform">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">38</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-orange-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium theme-transition">形变类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            波浪修改器
+                            <div class="modifier-english">Wave</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>在物体上生成波浪效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Wave" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+波浪修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- 法向类修改器 -->
+                    <tr class="modifier-row" data-category="normal">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">39</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition category-badge">法向类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            法线编辑修改器
+                            <div class="modifier-english">Normal Edit</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>用于调整模型表面的法线方向。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Normal+Edit" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+法线编辑修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="normal">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">40</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-blue-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium theme-transition">法向类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            加权法向修改器
+                            <div class="modifier-english">Weighted Normal</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>根据角度和面积权重计算法线。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Weighted+Normal" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+加权法向修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- 物理类修改器 -->
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">41</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition category-badge">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            布料修改器
+                            <div class="modifier-english">Cloth</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>模拟布料的物理特性。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Cloth" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+布料修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">42</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            碰撞修改器
+                            <div class="modifier-english">Collision</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>使物体参与碰撞物理计算。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Collision" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+碰撞修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">43</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            动态绘画修改器
+                            <div class="modifier-english">Dynamic Paint</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>模拟绘画与物体交互的动态效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Dynamic+Paint" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+动态绘画修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">44</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            爆破修改器
+                            <div class="modifier-english">Explode</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>使物体爆炸成碎片。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Explode" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+爆破修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">45</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            流体修改器
+                            <div class="modifier-english">Fluid</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>模拟流体物理效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Fluid" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+流体修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">46</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            洋面修改器
+                            <div class="modifier-english">Ocean</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>模拟海洋表面波浪效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Ocean" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+洋面修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">47</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            粒子实例修改器
+                            <div class="modifier-english">Particle Instance</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>通过粒子系统实例化物体。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Particle+Instance" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+粒子实例修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">48</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            粒子系统修改器
+                            <div class="modifier-english">Particle System</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>生成和控制粒子效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Particle+System" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+粒子系统修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="modifier-row" data-category="physics">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">49</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-purple-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium theme-transition">物理类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            软体修改器
+                            <div class="modifier-english">Soft Body</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>模拟柔软物体的物理效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Soft+Body" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+软体修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- 毛发类修改器 -->
+                    <tr class="modifier-row" data-category="hair">
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">50</td>
+                        <td class="py-4 px-6 border-b border-gray-200 bg-green-50 theme-transition">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium theme-transition category-badge">毛发类</span>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 font-medium theme-transition">
+                            毛发塑形修改器
+                            <div class="modifier-english">Hair Dynamics</div>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <p>控制毛发动态效果。</p>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://www.youtube.com/results?search_query=blender+Hair+Dynamics" target="_blank" class="tutorial-link foreign-tutorial">
+                                <i class="fa fa-youtube-play"></i> YouTube
+                            </a>
+                        </td>
+                        <td class="py-4 px-6 border-b border-gray-200 theme-transition">
+                            <a href="https://search.bilibili.com/all?keyword=blender+毛发塑形修改器" target="_blank" class="tutorial-link china-tutorial">
+                                <i class="fa fa-play-circle"></i> B站
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="mt-10 text-center text-gray-600 text-sm theme-transition">
+            <p>数据基于Blender 4.5版本整理，包含所有自带修改器</p>
+            <p class="mt-2">© 2024 Blender修改器参考手册</p>
+        </footer>
+    </div>
+
+    <script>
+        // 日夜间模式切换
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.getElementById('app-body');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            // 检查本地存储中的主题偏好
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                body.classList.add('dark');
+                applyDarkTheme();
+            } else {
+                applyLightTheme();
+            }
+            
+            // 切换主题
+            themeToggle.addEventListener('click', function() {
+                if (body.classList.contains('dark')) {
+                    body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    applyLightTheme();
+                } else {
+                    body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    applyDarkTheme();
+                }
+            });
+            
+            function applyDarkTheme() {
+                themeIcon.classList.remove('fa-moon-o');
+                themeIcon.classList.add('fa-sun-o');
+                themeIcon.classList.remove('text-gray-700');
+                themeIcon.classList.add('text-yellow-300');
+                
+                // 应用暗色主题样式
+                body.classList.add('bg-darkMode-bg', 'text-darkMode-text');
+                body.classList.remove('bg-gray-50', 'text-gray-800');
+                
+                // 更新表格和其他元素样式
+                document.querySelectorAll('.table-shadow').forEach(el => {
+                    el.classList.add('bg-darkMode-card');
+                    el.classList.remove('bg-white');
+                });
+                
+                document.querySelectorAll('tr.bg-gray-100').forEach(el => {
+                    el.classList.add('bg-darkMode-border');
+                    el.classList.remove('bg-gray-100');
+                });
+                
+                document.querySelectorAll('th, td').forEach(el => {
+                    el.classList.add('border-darkMode-border');
+                    el.classList.remove('border-gray-200');
+                });
+                
+                document.querySelectorAll('input, .filter-btn:not(.active)').forEach(el => {
+                    el.classList.add('bg-darkMode-border', 'border-darkMode-border', 'text-darkMode-text');
+                    el.classList.remove('bg-gray-200', 'border-gray-300', 'text-gray-800');
+                });
+            }
+            
+            function applyLightTheme() {
+                themeIcon.classList.remove('fa-sun-o');
+                themeIcon.classList.add('fa-moon-o');
+                themeIcon.classList.remove('text-yellow-300');
+                themeIcon.classList.add('text-gray-700');
+                
+                // 应用亮色主题样式
+                body.classList.remove('bg-darkMode-bg', 'text-darkMode-text');
+                body.classList.add('bg-gray-50', 'text-gray-800');
+                
+                // 更新表格和其他元素样式
+                document.querySelectorAll('.table-shadow').forEach(el => {
+                    el.classList.remove('bg-darkMode-card');
+                    el.classList.add('bg-white');
+                });
+                
+                document.querySelectorAll('tr.bg-darkMode-border').forEach(el => {
+                    el.classList.remove('bg-darkMode-border');
+                    el.classList.add('bg-gray-100');
+                });
+                
+                document.querySelectorAll('th, td').forEach(el => {
+                    el.classList.remove('border-darkMode-border');
+                    el.classList.add('border-gray-200');
+                });
+                
+                document.querySelectorAll('input, .filter-btn:not(.active)').forEach(el => {
+                    el.classList.remove('bg-darkMode-border', 'border-darkMode-border', 'text-darkMode-text');
+                    el.classList.add('bg-gray-200', 'border-gray-300', 'text-gray-800');
+                });
+            }
+
+            // 筛选功能
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const modifierRows = document.querySelectorAll('.modifier-row');
+            const searchInput = document.getElementById('search');
+
+            // 分类筛选
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 更新按钮样式
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-primary', 'text-white');
+                        btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                        if (body.classList.contains('dark')) {
+                            btn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                            btn.classList.add('bg-darkMode-border', 'hover:bg-opacity-80');
+                        }
+                    });
+                    this.classList.add('active', 'bg-primary', 'text-white');
+                    this.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'bg-darkMode-border', 'hover:bg-opacity-80');
+
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // 筛选行
+                    modifierRows.forEach(row => {
+                        if (filter === 'all' || row.getAttribute('data-category') === filter) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 搜索功能 - 支持中英文搜索
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                modifierRows.forEach(row => {
+                    const modifierName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    const description = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                    
+                    if (modifierName.includes(searchTerm) || description.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // 添加行悬停效果
+            modifierRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    if (body.classList.contains('dark')) {
+                        this.classList.add('bg-opacity-20', 'bg-white');
+                    } else {
+                        this.classList.add('bg-gray-50');
+                    }
+                });
+                row.addEventListener('mouseleave', function() {
+                    if (body.classList.contains('dark')) {
+                        this.classList.remove('bg-opacity-20', 'bg-white');
+                    } else {
+                        this.classList.remove('bg-gray-50');
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- 返回按钮 -->
+    <button class="return-button" onclick="window.location.href='../index-blender.html'" style="position: fixed; bottom: 20px; right: 20px; width: 76px; height: 76px; background: transparent; border: none; cursor: pointer; z-index: 1000; padding: 0; margin: 0; outline: none;">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; fill: white;">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </button>
+
+    <style>
+        .return-button::before {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms;
+        }
+        
+        .return-button::after {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border-radius: 50%;
+            border: 4px solid #007bff;
+            transform: scale(1.3);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .return-button:hover::before {
+            opacity: 0;
+            transform: scale(0.7);
+        }
+        
+        .return-button:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .return-button:hover svg {
+            transform: translate(-50%, -50%) translateX(-8px);
+        }
+    </style>
+</body>
+</html>

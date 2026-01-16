@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能模块菜单 - 黑夜模式</title>
+    <!-- 先引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入Tailwind配置 -->
+    <script src="几何节点tailwind.config.js"></script>
+    <!-- 引入自定义样式 -->
+    <link rel="stylesheet" href="几何节点styles.css">
+    <!-- 引入全局样式 -->
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+<body class="font-inter bg-dark text-gray-100">
+    <div class="flex h-screen overflow-hidden bg-dark">
+        <!-- 菜单区域 -->
+        <div id="menu" class="flex h-full bg-secondary transition-all duration-200 ease-in-out"></div>
+        
+        <!-- 内容区域 -->
+        <div class="flex-1 p-6 bg-dark overflow-y-auto">
+            <h1 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-gray-100 mb-4">功能模块菜单</h1>
+            <p class="text-gray-400 mb-6">鼠标悬停在左侧菜单上浏览各级功能模块</p>
+            <div class="bg-secondary p-6 rounded-lg shadow-md border border-dark-card">
+                <div id="selected-item" class="text-xl font-medium text-primary mb-4">未选择任何功能</div>
+                <div id="item-description" class="text-gray-300 space-y-3 leading-relaxed">
+                    选择左侧菜单中的功能模块以查看详细说明
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按钮 -->
+    <button class="return-button" onclick="window.location.href='../index-blender.html'" style="position: fixed; bottom: 20px; right: 20px; width: 76px; height: 76px; background: transparent; border: none; cursor: pointer; z-index: 1000; padding: 0; margin: 0; outline: none;">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; fill: white;">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </button>
+
+    <style>
+        .return-button::before {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms;
+        }
+        
+        .return-button::after {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border-radius: 50%;
+            border: 4px solid #007bff;
+            transform: scale(1.3);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .return-button:hover::before {
+            opacity: 0;
+            transform: scale(0.7);
+        }
+        
+        .return-button:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .return-button:hover svg {
+            transform: translate(-50%, -50%) translateX(-8px);
+        }
+    </style>
+
+    <!-- 引入交互脚本 -->
+    <script src="几何节点.js"></script>
+</body>
+</html>
