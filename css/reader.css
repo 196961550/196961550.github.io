@@ -1,0 +1,75 @@
+/* 阅读页面样式 */
+#selectionScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.dropzone {
+    width: 300px;
+    height: 200px;
+    border: 2px dashed white;
+    text-align: center;
+    line-height: 200px;
+    cursor: pointer;
+}
+
+#bookReader {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#bookContent {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    overflow-y: auto;
+}
+
+#controls {
+    display: none; /* 默认隐藏 */
+    justify-content: center;
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    border-radius: 50px;
+    gap: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#controls.epub-controls {
+    display: flex; /* EPUB模式下显示 */
+}
+
+#controls.visible {
+    opacity: 1;
+}
+
+#controls button {
+    padding: 10px 25px;
+    border-radius: 50px;
+    background: linear-gradient(145deg, #0066cc, #004d99);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#controls button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#controls button:active {
+    transform: translateY(1px);
+}
